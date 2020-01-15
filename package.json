@@ -1,0 +1,31 @@
+{
+  "name": "setup-reactnative-environment",
+  "version": "1.0.0",
+  "description": "Install all dependencies and configure your environment for React Native development",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/molant/setup-reactnative-environment.git"
+  },
+  "keywords": [
+    "react-native"
+  ],
+  "author": "molant",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/molant/setup-reactnative-environment/issues"
+  },
+  "homepage": "https://github.com/molant/setup-reactnative-environment#readme",
+  "devDependencies": {
+    "@types/got": "^9.6.9",
+    "@types/node": "^13.1.6",
+    "typescript": "^3.7.4"
+  },
+  "dependencies": {
+    "got": "^10.2.2",
+    "unzipper": "^0.10.5"
+  }
+}

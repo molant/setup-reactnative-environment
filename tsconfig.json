@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "strict": false,
+        "target": "ESNext",
+        "allowJs": true,
+        "checkJs": true,
+        "moduleResolution": "Node"
+    }
+}
