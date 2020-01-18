@@ -1,7 +1,7 @@
 // const { getIsPythonInstalled } = require('../lib/python-installed');
 const path = require('path');
 
-const { execute, updateEnvironment } = require('../lib/installer');
+const { execute, setEnvironment, updateEnvironment } = require('../lib/installer');
 
 const { download } = require('../lib/downloader');
 
@@ -37,7 +37,7 @@ const install = async () => {
 
     await execute(installJDK);
 
-    await updateEnvironment('JAVA_HOME', targetDir);
+    await setEnvironment('JAVA_HOME', targetDir);
     await updateEnvironment('PATH', path.join(targetDir, 'bin'));
 };
 

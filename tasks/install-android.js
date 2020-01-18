@@ -3,7 +3,7 @@ const fs = require('fs');
 const { exec } = require('child_process');
 const unzipper = require('unzipper');
 
-const { execute, updateEnvironment } = require('../lib/installer');
+const { execute, setEnvironment, updateEnvironment } = require('../lib/installer');
 const { download } = require('../lib/downloader');
 
 const ANDROID_SDK_TOOLS = `https://dl.google.com/android/repository/sdk-tools-windows-4333796.zip`;
@@ -15,7 +15,7 @@ const packages = [
     // '"tools"', // These are the download ones, maybe change the name to just android-sdk and they will live under tools
     'platform-tools', // Android SDK Platform ?
     // need to detect if Hyper-V is enabled for the following
-    'extras;intel;Hardware_Accelerated_Execution_Manager', // Performance (Intel ® HAXM) (See here for AMD)
+    // 'extras;intel;Hardware_Accelerated_Execution_Manager', // Performance (Intel ® HAXM) (See here for AMD)
     'extras;google;Android_Emulator_Hypervisor_Driver', // In case Hyper-V is enabled
     'emulator', // Android Virtual Device ?
     'platforms;android-28', // Android SDK Platform 28
@@ -37,7 +37,11 @@ const installDependency = (command) => {
         const child = exec(command, { maxBuffer: 1024 * 500 });
 
         child.stdout.on('data', (data) => {
-            console.log(data);
+            if (data.includes('(y/N):')) {
+                console.log(`Accepting License for ${command}`);
+
+                child.stdin.write('y\n');
+            }
         });
 
         child.stderr.on('data', (data) => {
@@ -66,7 +70,7 @@ const install = async () => {
     const targetDir = path.join(LOCALAPPDATA, 'Android');
 
     console.log(`Unzipping tools into ${targetDir}`);
-    await extractSdk(androidSdkTools, targetDir);
+    // await extractSdk(androidSdkTools, targetDir);
     console.log(`Done`);
 
     console.log(`Installing other Android packages`);
@@ -77,14 +81,17 @@ const install = async () => {
      */
     const sdkmanager = path.join(targetDir, 'tools', 'bin', 'sdkmanager');
 
-    for (const package of packages) {
-        const installAndroidDependenciesCommand = `${sdkmanager} "${package}"`;
+    // for (const package of packages) {
+    //     const installAndroidDependenciesCommand = `${sdkmanager} "${package}"`;
 
-        await installDependency(installAndroidDependenciesCommand);
-    }
+    //     await installDependency(installAndroidDependenciesCommand);
+    // }
 
-    await updateEnvironment('ANDROID_HOME', path.join(targetDir, 'sdk'));
+    await setEnvironment('ANDROID_HOME', path.join(targetDir, 'sdk'));
     await updateEnvironment('PATH', path.join(targetDir, 'tools'));
+    await updateEnvironment('PATH', path.join(targetDir, 'platform-tools'));
+
+    const createAvd = `android create avd`;
 };
 
 module.exports = {

@@ -1,7 +1,7 @@
 // const { getIsPythonInstalled } = require('../lib/python-installed');
 const path = require('path');
 
-const { execute } = require('../lib/installer');
+const { execute, updateEnvironment } = require('../lib/installer');
 
 const { download } = require('../lib/downloader');
 
@@ -27,9 +27,8 @@ const install = async () => {
 
     await execute(command);
 
-    console.log('Updating PATH');
-    await execute(`setx PATH "${targetDir};%PATH%"`);
-    // Add targetDir/Scripts?
+    await updateEnvironment(`PATH`, targetDir);
+    await updateEnvironment(`PATH`, path.join(targetDir, 'scripts'));
 };
 
 module.exports = {
